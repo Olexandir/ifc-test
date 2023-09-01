@@ -226,3 +226,9 @@ setChanges.addEventListener('click', () => {
 
   ifcLoader.ifcManager.ifcAPI.WriteLine(currentModelId, props);
 });
+
+async function save() {
+  const data = await ifcLoader.ifcManager.ifcAPI.ExportFileAsIFC(
+    currentModelId,
+  );
+}
