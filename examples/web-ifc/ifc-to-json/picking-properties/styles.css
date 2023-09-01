@@ -1,0 +1,103 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+button {
+  outline: none;
+  border: none;
+}
+
+#three-canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  outline: none;
+}
+
+#file-input {
+  z-index: 1;
+  position: absolute;
+}
+
+#set-changes {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  padding: 0.5rem;
+  background-color: #f3f4f6;
+  border-radius: 10px;
+  border: none;
+  transition: all 0.1s ease-in-out;
+  box-shadow: 0 0 0 0 #e6e6e6;
+  cursor: pointer;
+  border: 2px solid orange;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.file-opener {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  top: 2%;
+  right: 1rem;
+}
+
+.basic-button {
+  background-color: #f3f4f6;
+  padding: 0.75rem;
+  border-radius: 10px;
+  border: none;
+  transition: all 0.1s ease-in-out;
+  box-shadow: 0 0 0 0 #e6e6e6;
+  cursor: pointer;
+  border: 2px solid orange;
+
+  font-size: 14px;
+  font-weight: bold;
+}
+
+.basic-button:hover {
+  background-color: white;
+  box-shadow: 0 10px 20px 8px #e6e6e6;
+}
+
+.basic-button:active {
+  background-color: #f3f4f6;
+}
+
+.invisible {
+  visibility: collapse;
+}
+
+.message-container {
+  z-index: 1;
+  position: absolute;
+  margin: 16px;
+  background-color: rgba(255, 255, 255, 0.8);
+  display: inline-block;
+  padding: 10px;
+  overflow: auto;
+  width: 33vw;
+  height: 100vh;
+}
+
+.message {
+  display: inline;
+  color: black;
+}
