@@ -227,8 +227,20 @@ setChanges.addEventListener('click', () => {
   ifcLoader.ifcManager.ifcAPI.WriteLine(currentModelId, props);
 });
 
-async function save() {
-  const data = await ifcLoader.ifcManager.ifcAPI.ExportFileAsIFC(
-    currentModelId,
-  );
+const link = document.getElementById('save-button');
+
+link.addEventListener('click', createLink);
+
+async function createLink() {
+  const data = ifcLoader.ifcManager.ifcAPI.ExportFileAsIFC(currentModelId);
+  const blob = new Blob([data]);
+  const file = new File([blob], 'modified.ifc');
+  const url = URL.createObjectURL(file);
+  const link = document.createElement('a');
+  link.innerText = 'Download';
+  link.download = 'modified.ifc';
+  link.setAttribute('href', url);
+
+  document.body.appendChild(link);
+  link.click();
 }
