@@ -9,14 +9,14 @@ import {
   Raycaster,
   Vector2,
   WebGLRenderer,
-} from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
-import { IFCLoader } from 'web-ifc-three/IFCLoader';
+} from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import { IFCLoader } from "web-ifc-three/IFCLoader";
 import {
   acceleratedRaycast,
   computeBoundsTree,
   disposeBoundsTree,
-} from 'three-mesh-bvh';
+} from "three-mesh-bvh";
 // import { geometryTypes } from './geometry-types';
 import {
   IfcAPI,
@@ -26,8 +26,8 @@ import {
   IFCDOOR,
   IFCWALL,
   IFCWALLSTANDARDCASE,
-} from 'web-ifc/web-ifc-api';
-import { IFCBUILDINGSTOREY, IFCSLAB } from 'web-ifc';
+} from "web-ifc/web-ifc-api";
+import { IFCBUILDINGSTOREY, IFCSLAB } from "web-ifc";
 
 //Creates the Three.js scene
 const scene = new Scene();
@@ -57,7 +57,7 @@ scene.add(directionalLight);
 scene.add(directionalLight.target);
 
 //Sets up the renderer, fetching the canvas of the HTML
-const threeCanvas = document.getElementById('three-canvas');
+const threeCanvas = document.getElementById("three-canvas");
 const renderer = new WebGLRenderer({ canvas: threeCanvas, alpha: true });
 renderer.setSize(size.width, size.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
@@ -86,15 +86,15 @@ const animate = () => {
 animate();
 
 //Adjust the viewport to the size of the browser
-window.addEventListener('resize', () => {
+window.addEventListener("resize", () => {
   (size.width = window.innerWidth), (size.height = window.innerHeight);
   camera.aspect = size.width / size.height;
   camera.updateProjectionMatrix();
   renderer.setSize(size.width, size.height);
 });
 
-const button = document.getElementById('file-opener-button');
-button.addEventListener('click', () => input.click());
+const button = document.getElementById("file-opener-button");
+button.addEventListener("click", () => input.click());
 
 //! Sets up the IFC loading
 
@@ -102,7 +102,7 @@ button.addEventListener('click', () => input.click());
 // ifcapi.SetWasmPath('../../../../');
 const ifcModels = [];
 const ifcLoader = new IFCLoader();
-ifcLoader.ifcManager.setWasmPath('../../../../');
+ifcLoader.ifcManager.setWasmPath("../../../../");
 
 // ifcLoader.ifcManager.setWasmPath('../../../');
 // ifcLoader.load('../../../IFC/01.ifc', (ifcModel) => {
@@ -110,11 +110,11 @@ ifcLoader.ifcManager.setWasmPath('../../../../');
 //   scene.add(ifcModel);
 // });
 
-const input = document.getElementById('file-input');
+const input = document.getElementById("file-input");
 let storeys = [];
 
 input.addEventListener(
-  'change',
+  "change",
   async () => {
     const file = input.files[0];
     const url = URL.createObjectURL(file);
@@ -126,14 +126,14 @@ input.addEventListener(
     storeys = await ifcLoader.ifcManager.getAllItemsOfType(
       model.modelID,
       IFCSLAB,
-      false,
+      false
     );
 
     // const reader = new FileReader();
     // reader.onload = () => loadFile(reader.result);
     // reader.readAsText(changed.target.files[0]);
   },
-  false,
+  false
 );
 
 //!!!
@@ -142,7 +142,7 @@ input.addEventListener(
 ifcLoader.ifcManager.setupThreeMeshBVH(
   computeBoundsTree,
   disposeBoundsTree,
-  acceleratedRaycast,
+  acceleratedRaycast
 );
 
 const raycaster = new Raycaster();
@@ -171,7 +171,7 @@ function cast(event) {
 let currentModelId = null;
 let storeyId = null;
 let props = null;
-const output = document.getElementById('id-output');
+const output = document.getElementById("id-output");
 
 async function pick(event) {
   const found = cast(event)[0];
@@ -187,6 +187,10 @@ async function pick(event) {
     console.log(storeyId, currentModelId);
 
     props = await ifc.getItemProperties(currentModelId, storeyId);
+    const p2 = await ifc.getPropertySets(currentModelId, storeyId);
+    const sub = await ifc.getSpatialStructure(currentModelId);
+    console.log(sub);
+    console.log(p2);
     console.log(props);
     output.innerHTML = JSON.stringify(props, null, 2);
   }
@@ -205,8 +209,8 @@ window.ondblclick = pick;
 //   false,
 // );
 
-const setChanges = document.getElementById('set-changes');
-setChanges.addEventListener('click', () => {
+const setChanges = document.getElementById("set-changes");
+setChanges.addEventListener("click", () => {
   //   console.log(currentModelId, JSON.parse(output.outerText));
   //   ifcLoader.ifcManager.ifcAPI.WriteLine(
   //     currentModelId,
@@ -215,7 +219,7 @@ setChanges.addEventListener('click', () => {
   const a = JSON.parse(output.outerText);
   const keys = Object.keys(a);
 
-  console.log('keys', a, keys);
+  console.log("keys", a, keys);
 
   //   const elem = ifcLoader.ifcManager.ifcAPI.GetLine(currentModelId, storeyId);
   //   console.log(elem);
@@ -227,19 +231,19 @@ setChanges.addEventListener('click', () => {
   ifcLoader.ifcManager.ifcAPI.WriteLine(currentModelId, props);
 });
 
-const link = document.getElementById('save-button');
+const link = document.getElementById("save-button");
 
-link.addEventListener('click', createLink);
+link.addEventListener("click", createLink);
 
 async function createLink() {
   const data = ifcLoader.ifcManager.ifcAPI.ExportFileAsIFC(currentModelId);
   const blob = new Blob([data]);
-  const file = new File([blob], 'modified.ifc');
+  const file = new File([blob], "modified.ifc");
   const url = URL.createObjectURL(file);
-  const link = document.createElement('a');
-  link.innerText = 'Download';
-  link.download = 'modified.ifc';
-  link.setAttribute('href', url);
+  const link = document.createElement("a");
+  link.innerText = "Download";
+  link.download = "modified.ifc";
+  link.setAttribute("href", url);
 
   document.body.appendChild(link);
   link.click();
